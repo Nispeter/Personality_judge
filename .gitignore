@@ -42,6 +42,6 @@ sysinfo.txt
 
 # Windows generated files
 Thumbs.db
-
+.env
 venv/
 config.py

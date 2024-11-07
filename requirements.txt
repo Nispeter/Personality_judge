@@ -1,2 +1,12 @@
 openai
 scienceworld
+flask
+requests
+langchain
+langchain_openai    
+langsmith
+pandas
+langchain_experimental
+matplotlib
+langgraph
+langchain_core

@@ -1,23 +1,24 @@
 import time
 from openai import OpenAI
+from flask import Flask, request, jsonify
 
 client = OpenAI(api_key='')
 import argparse
 from scienceworld import ScienceWorldEnv
 
-# Set your OpenAI API key here
 
-def ask_gpt(prompt):
+def ask_model(prompt):
+    # completion = client.chat.completions.create(
+    # model="gpt-4o",
+    # messages=[
+    #     {"role": "system", "content": prompt}
+    # ])
+    # return completion.choices[0].message.content.strip()
+    # llama a model server 
+    user_input  = input(prompt)
+    return user_input
 
-    completion = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[
-        {"role": "system", "content": prompt}
-    ])
-    return completion.choices[0].message.content.strip()
-
- 
-def chatgptModel(args):
+def run_experiment(args):
     """ ChatGPT-powered agent for ScienceWorld. """
     exitCommands = ["quit", "exit"]
 
@@ -53,7 +54,6 @@ def chatgptModel(args):
             print("----------------------------------------------------------------")
             print("Step: " + str(curIter))
 
-            # Send user input, get response from the environment
             observation, reward, isCompleted, info = env.step(userInputStr)
             score = info['score']
 
@@ -65,10 +65,8 @@ def chatgptModel(args):
             if isCompleted:
                 break
 
-            # Get valid actions
             validActions = env.get_valid_action_object_combinations_with_templates()
 
-            # Create a prompt for GPT based on current state and valid actions
             prompt = f"""
             You are controlling an agent in a text-based science simulation game. 
             The current state is as follows:
@@ -78,9 +76,7 @@ def chatgptModel(args):
 
             What should be the next action? Return just the action name without any additional text or punctuation.
             """
-
-            # Ask ChatGPT for the next action
-            gptAction = ask_gpt(prompt)
+            gptAction = ask_model(prompt)
             print(f"ChatGPT suggests: {gptAction}")
             userInputStr = gptAction.lower().strip()
 
@@ -101,7 +97,6 @@ def chatgptModel(args):
 
     print("Completed.")
 
-
 def build_simplification_str(args):
     simplifications = list()
     if args["teleport"]:
@@ -116,7 +111,6 @@ def build_simplification_str(args):
         simplifications.append("noElectricalAction")
 
     return args["simplifications_preset"] or ",".join(simplifications)
-
 
 def parse_args():
     parser = argparse.ArgumentParser("Run ChatGPT agent in ScienceWorld.")
@@ -140,4 +134,4 @@ def parse_args():
 if __name__ == "__main__":
     args = parse_args()
     args['simplification_str'] = build_simplification_str(args)
-    chatgptModel(args)
+    run_experiment(args)
