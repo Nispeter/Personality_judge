@@ -68,7 +68,8 @@ def init_env():
     """La primera llamada que hace el modelo es para iniciar el entorno y recibir la prompt inicial"""
     url = "http://localhost:5000/init"
     data = {
-        "task_num": 13,
+        "task_num": 2,
+        "var_num": 1,
         "simplification_str": "",
         "num_episodes": 1,
         "env_step_limit": 100,
@@ -213,7 +214,7 @@ events = graph.stream(
         ],
     },
     # Maximum number of steps to take in the graph
-    {"recursion_limit": 10},
+    {"recursion_limit": 30},
 )
 # Iterar sobre los eventos y formatear la salida
 #for event in events:

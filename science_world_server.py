@@ -1,6 +1,9 @@
 import time
-from flask import Flask, request, jsonify
 import argparse
+import uuid
+import csv
+import os
+from flask import Flask, request, jsonify
 from scienceworld import ScienceWorldEnv
 
 app = Flask(__name__)
@@ -10,6 +13,20 @@ current_observation = None
 current_score = 0
 is_completed = False
 cur_iter = 0
+current_filename = ""
+
+def init_file(task_name):
+    global current_filename
+    current_filename = f"task_{task_name}_{uuid.uuid4()}.csv"
+    with open(current_filename, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Step", "Action", "Observation",  "Reward", "Completed", "Score"])
+    
+def add_data_to_file(data):
+    with open(current_filename, mode='a') as file:
+        writer = csv.writer(file)
+        writer.writerow(data)
+    
 
 @app.route("/init", methods=["POST"])
 def init_environment():
@@ -17,20 +34,23 @@ def init_environment():
 
     data = request.json
     task_idx = data.get('task_num', 13)
+    var_num = data.get('var_num', 0)
     simplification_str = data.get('simplification_str', '')
     num_episodes = data.get('num_episodes', 1)
-    env_step_limit = data.get('env_step_limit', 100)
+    env_step_limit = data.get('env_step_limit', 30)
     jar_path = data.get('jar_path', '')
 
     env = ScienceWorldEnv("", jar_path, envStepLimit=env_step_limit)
     task_names = env.get_task_names()
     task_name = task_names[task_idx]
-    env.load(task_name, 0, simplification_str)
+    env.load(task_name, var_num, simplification_str)
     current_observation, _ = env.reset()
     current_score = 0
     is_completed = False
     cur_iter = 0
-
+    
+    init_file(task_name)
+    
     return next_step(action="look around")
 
 @app.route("/action", methods=["POST"])
@@ -95,11 +115,12 @@ def next_step(action=None):
     The current state is as follows:
     Observation: {observation}
     Inventory: {env.inventory()}
-    Valid actions: {[action['action'] for action in env.get_valid_action_object_combinations_with_templates()]}
-
+    Valid Actions: {env.get_possible_actions()}
+    Valid Objects for OBJ in Actions: {env.get_possible_objects()}
+    Task: {str(env.get_task_description())}
     What should be the next action? Return just the action name without any additional text or punctuation.
     """
-    
+    # Valid actions: {[action['action'] for action in env.get_valid_action_object_combinations_with_templates()]}
     response = {
         "prompt": prompt,
         "current_step": cur_iter,
@@ -107,6 +128,7 @@ def next_step(action=None):
         "is_completed": is_completed,
         "score": current_score
     }
+    add_data_to_file([cur_iter, action, observation,  reward, is_completed, current_score])
     return jsonify(response)
 
 

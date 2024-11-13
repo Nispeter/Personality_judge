@@ -1,0 +1,14 @@
+Step,Action,Observation,Reward,Completed,Score
+1,look around,"This room is called the hallway. In it, you see: 
+	the agent
+	a substance called air
+	a picture
+You also see:
+	A door to the art studio (that is closed)
+	A door to the bedroom (that is closed)
+	A door to the greenhouse (that is closed)
+	A door to the kitchen (that is closed)
+	A door to the living room (that is closed)
+	A door to the workshop (that is closed)",0,False,0
+2,open door to kitchen,The door is now open.,0,False,0
+3,go to kitchen,You move to the kitchen.,17,False,17
