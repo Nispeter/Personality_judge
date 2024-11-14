@@ -1,0 +1,37 @@
+Step,Action,Observation,Reward,Completed,Score
+1,look around,"This room is called the hallway. In it, you see: 
+	the agent
+	a substance called air
+	a picture
+You also see:
+	A door to the art studio (that is closed)
+	A door to the bedroom (that is closed)
+	A door to the greenhouse (that is closed)
+	A door to the kitchen (that is closed)
+	A door to the living room (that is closed)
+	A door to the workshop (that is closed)",0,False,0
+2,open door to the greenhouse,The door is now open.,8,False,8
+3,go door to the greenhouse,You move through the door to the greenhouse.,9,False,17
+4,look around,"This room is called the greenhouse. In it, you see: 
+	the agent
+	a substance called air
+	a bee hive. The bee hive door is closed. 
+	a flower pot 2 (containing nothing)
+	a flower pot 5 (containing a pea plant in the adult stage with a tall height, soil)
+	a flower pot 6 (containing a cherry tree in the adult stage, soil)
+	a flower pot 8 (containing a apple tree in the adult stage, soil)
+	a flower pot 9 (containing nothing)
+	a jug (containing nothing)
+	a shovel
+	a sink, which is turned off. In the sink is: nothing.
+You also see:
+	A door to the hallway (that is open)
+	A door to the outside (that is closed)",0,False,17
+5,focus on pea plant,You focus on the pea plant.,50,False,67
+6,move pea plant to red box in kitchen,No known action matches that input.,0,False,67
+7,pick up pea plant,You move the pea plant to the inventory.,8,False,75
+8,go door to the hallway,You move through the door to the hallway.,0,False,75
+9,open door to the kitchen,The door is now open.,0,False,75
+10,go door to the kitchen,You move through the door to the kitchen.,8,False,83
+11,put down pea plant,You move the pea plant to the kitchen.,0,False,83
+12,move pea plant to red box,You move the pea plant to the red box.,17,True,100

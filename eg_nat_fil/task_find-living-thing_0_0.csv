@@ -1,0 +1,44 @@
+Step,Action,Observation,Reward,Completed,Score
+1,look around,"This room is called the hallway. In it, you see: 
+	the agent
+	a substance called air
+	a picture
+You also see:
+	A door to the art studio (that is closed)
+	A door to the bedroom (that is closed)
+	A door to the greenhouse (that is closed)
+	A door to the kitchen (that is closed)
+	A door to the living room (that is closed)
+	A door to the workshop (that is closed)",0,False,0
+2,open door to the greenhouse,The door is now open.,8,False,8
+3,go greenhouse,You move to the greenhouse.,9,False,17
+4,look around,"This room is called the greenhouse. In it, you see: 
+	the agent
+	a substance called air
+	a bee hive. The bee hive door is closed. 
+	a flower pot 2 (containing nothing)
+	a flower pot 5 (containing a pea plant in the adult stage with a tall height, soil)
+	a flower pot 6 (containing a cherry tree in the adult stage, soil)
+	a flower pot 8 (containing a apple tree in the adult stage, soil)
+	a flower pot 9 (containing nothing)
+	a jug (containing nothing)
+	a shovel
+	a sink, which is turned off. In the sink is: nothing.
+You also see:
+	A door to the hallway (that is open)
+	A door to the outside (that is closed)",0,False,17
+5,focus on pea plant,You focus on the pea plant.,50,False,67
+6,move pea plant to the red box in the kitchen,No known action matches that input.,0,False,67
+7,pick up pea plant,You move the pea plant to the inventory.,8,False,75
+8,go to kitchen,No known action matches that input.,0,False,75
+9,go hallway,You move to the hallway.,0,False,75
+10,go kitchen,The door is not open.,0,False,75
+11,open door to the kitchen,The door is now open.,0,False,75
+12,go kitchen,You move to the kitchen.,8,False,83
+13,go greenhouse,No known action matches that input.,0,False,83
+14,go hallway,You move to the hallway.,0,False,83
+15,go greenhouse,You move to the greenhouse.,0,False,83
+16,focus on cherry tree,You focus on the cherry tree.,0,False,83
+17,pick up cherry tree,You move the cherry tree to the inventory.,0,False,83
+18,go hallway,You move to the hallway.,0,False,83
+19,go kitchen,You move to the kitchen.,0,False,83

@@ -51,32 +51,33 @@ def userConsole(args):
     #   Examples of how to access much of the environment information that the API exposes.
     #   (Many of these are similar to the Jericho API)
     #
+    
     print("Task Names: " + str(taskNames))
-    print("Possible actions: " + str(env.get_possible_actions()))
-    print("Possible objects: " + str(env.get_possible_objects()))
-    templates, lut = env.get_possible_action_object_combinations()
-    print("Possible action/object combinations: " + str(templates))
+    # print("Possible actions: " + str(env.get_possible_actions()))
+    # print("Possible objects: " + str(env.get_possible_objects()))
+    # templates, lut = env.get_possible_action_object_combinations()
+    # print("Possible action/object combinations: " + str(templates))
+    # # print("Object IDX to Object Referent LUT: " + str(lut))
+    # print("Vocabulary: " + str(env.get_vocabulary()))
+    # print("Possible actions (with IDs): " + str(env.get_possible_actions_with_IDs()))
+    # print("Possible object types: " + str(env.get_object_types()))
     # print("Object IDX to Object Referent LUT: " + str(lut))
-    print("Vocabulary: " + str(env.get_vocabulary()))
-    print("Possible actions (with IDs): " + str(env.get_possible_actions_with_IDs()))
-    print("Possible object types: " + str(env.get_object_types()))
-    print("Object IDX to Object Referent LUT: " + str(lut))
-    print("\n")
-    print("Possible object referents LUT: " + str(env.get_possible_object_referent_LUT()))
-    print("\n")
-    print("Valid action-object combinations: " +
-          str(env.get_valid_action_object_combinations()))
-    print("\n")
-    print("Object_ids to type_ids: " + str(env.get_all_object_types_LUTJSON()))
-    print("\n")
-    print("All objects, their ids, types, and referents: " +
-          str(env.get_all_object_ids_types_referents_LUTJSON()))
-    print("\n")
-    print("Valid action-object combinations (with templates): " +
-          str(env.get_valid_action_object_combinations_with_templates()))
-    print("\n")
-    print("Object Type LUT: " + str(env.get_possible_object_referent_types_LUT()))
-    print("Variations (train): " + str(env.get_variations_train()))
+    # print("\n")
+    # print("Possible object referents LUT: " + str(env.get_possible_object_referent_LUT()))
+    # print("\n")
+    # print("Valid action-object combinations: " +
+    #       str(env.get_valid_action_object_combinations()))
+    # print("\n")
+    # print("Object_ids to type_ids: " + str(env.get_all_object_types_LUTJSON()))
+    # print("\n")
+    # print("All objects, their ids, types, and referents: " +
+    #       str(env.get_all_object_ids_types_referents_LUTJSON()))
+    # print("\n")
+    # print("Valid action-object combinations (with templates): " +
+    #       str(env.get_valid_action_object_combinations_with_templates()))
+    # print("\n")
+    # print("Object Type LUT: " + str(env.get_possible_object_referent_types_LUT()))
+    # print("Variations (train): " + str(env.get_variations_train()))
 
     print("")
     print("----------------------------------------------------------------------------------")
@@ -181,9 +182,9 @@ def parse_args():
     parser = argparse.ArgumentParser(desc)
     parser.add_argument("--jar_path", type=str,
                         help="Path to the ScienceWorld jar file. Default: use builtin.")
-    parser.add_argument("--task-num", type=int, default=13,
+    parser.add_argument("--task-num", type=int, default=5,
                         help="Specify the task number to play. Default: %(default)s")
-    parser.add_argument("--var-num", type=int, default=0,
+    parser.add_argument("--var-num", type=int, default=2,
                         help="Specify the task variation number to play. Default: %(default)s")
     parser.add_argument("--env-step-limit", type=int, default=100,
                         help="Maximum number of steps per episode. Default: %(default)s")

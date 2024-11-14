@@ -14,10 +14,11 @@ current_score = 0
 is_completed = False
 cur_iter = 0
 current_filename = ""
+history = []
 
-def init_file(task_name):
+def init_file(task_name, task_num, call_id):
     global current_filename
-    current_filename = f"task_{task_name}_{uuid.uuid4()}.csv"
+    current_filename = f"task_{task_name}_{task_num}_{call_id}.csv"
     with open(current_filename, mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Step", "Action", "Observation",  "Reward", "Completed", "Score"])
@@ -31,10 +32,12 @@ def add_data_to_file(data):
 @app.route("/init", methods=["POST"])
 def init_environment():
     global env, current_observation, current_score, is_completed, cur_iter
-
+    history.clear()
+    
     data = request.json
     task_idx = data.get('task_num', 13)
     var_num = data.get('var_num', 0)
+    call_id = data.get('call_id', 0)
     simplification_str = data.get('simplification_str', '')
     num_episodes = data.get('num_episodes', 1)
     env_step_limit = data.get('env_step_limit', 30)
@@ -49,7 +52,7 @@ def init_environment():
     is_completed = False
     cur_iter = 0
     
-    init_file(task_name)
+    init_file(task_name, var_num, call_id)
     
     return next_step(action="look around")
 
@@ -88,6 +91,8 @@ def get_valid_actions():
     return jsonify({"valid_actions": action_names})
 
 
+
+
 @app.route("/step", methods=["POST"])
 def next_step(action=None):
     global env, current_observation, current_score, is_completed, cur_iter
@@ -105,22 +110,30 @@ def next_step(action=None):
     if not action:
         return jsonify({"error": "No action provided"}), 400
 
+    
+
     observation, reward, is_completed, info = env.step(action)
     current_observation = observation
     current_score = info['score']
     cur_iter += 1
-
+    
+    history.append((action, observation))
+    if len(history) > 4:
+        history.pop(0)
+        
     prompt = f"""
     You are controlling an agent in a text-based science simulation game. 
     The current state is as follows:
-    Observation: {observation}
-    Inventory: {env.inventory()}
+    Previous Actions: {history}
     Valid Actions: {env.get_possible_actions()}
-    Valid Objects for OBJ in Actions: {env.get_possible_objects()}
+    Inventory: {env.inventory()}
     Task: {str(env.get_task_description())}
     What should be the next action? Return just the action name without any additional text or punctuation.
     """
     # Valid actions: {[action['action'] for action in env.get_valid_action_object_combinations_with_templates()]}
+    # Valid Objects for OBJ in Actions: {env.get_possible_objects()}
+    # Observation: {observation}
+     
     response = {
         "prompt": prompt,
         "current_step": cur_iter,
@@ -157,7 +170,7 @@ def parse_args():
     parser.add_argument("--num-episodes", type=int, default=5, help="Number of episodes to run.")
     parser.add_argument("--output_path_prefix", type=str, default="./output/", help="Path prefix for output files.")
     parser.add_argument("--max_episode_per_file", type=int, default=10, help="Max episodes per output file.")
-    parser.add_argument("--simplifications_preset", type=str, default=None, help="Simplifications preset.")
+    parser.add_argument("--simplifications_preset", type=str, default=all, help="Simplifications preset.")
     parser.add_argument("--teleport", action='store_true', help="Enable teleport simplification.")
     parser.add_argument("--self_watering_plants", action='store_true', help="Enable self-watering plants.")
     parser.add_argument("--open_containers", action='store_true', help="Enable auto-open containers.")

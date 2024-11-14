@@ -1,4 +1,6 @@
+import json
 import os
+import uuid
 
 from langchain_core.messages import (
     BaseMessage,
@@ -22,6 +24,26 @@ from langgraph.prebuilt import ToolNode
 
 load_dotenv()
 
+
+personalities = {
+    "philosophical": {
+        "name": "philosophical personality",
+        "description": "A deeply reflective decision-making AI that approaches every topic with thoughtful consideration of abstract, ethical, and moral principles."
+    },
+    "naturalist": {
+        "name": "naturalist personality",
+        "description": "An evidence-based decision-making AI that relies on scientific reasoning and data-driven methods to form logical conclusions."
+    },
+    "logical": {
+        "name": "logical mathematical personality",
+        "description": "A pragmatic and solution-oriented decision-making AI that emphasizes logic, patterns, and structured approaches to problems."
+    },
+    "emotional": {
+        "name": "emotional personality",
+        "description": "An empathetic and intuitive decision-making AI that connects with human emotions, focusing on understanding and expressing emotional perspectives."
+    }
+}
+
 def create_agent_interpreter(llm, tools, system_message: str):
     """Crea el agente intérprete."""
     prompt = ChatPromptTemplate.from_messages(
@@ -31,7 +53,7 @@ def create_agent_interpreter(llm, tools, system_message: str):
                 "You are an interpreter AI, initiating the analysis of the environment. "
                 "Use the available tools to retrieve and send the package containing the prompt, which contains observations, "
                 "inventory, and valid actions to the decision-making AIs. Relay the results back and continue until 'is_completed' is received as True. "
-                "If 'is_completed' is True then answer with FINISHED as a prefix to your answer."
+                "If 'is_completed' is True and there are no tasks remaining then answer with FINISHED as a prefix to your answer, else continue answering."
                 "You have access to the following tools: {tool_names}.\n{system_message}"
             ),
             MessagesPlaceholder(variable_name="messages"),
@@ -41,16 +63,20 @@ def create_agent_interpreter(llm, tools, system_message: str):
     prompt = prompt.partial(tool_names=", ".join([tool.name for tool in tools]))
     return prompt | llm.bind_tools(tools)
 
-def create_agent_decider_no_tools(llm, system_message: str):
+def load_personalities(file_path = "personalities.json"):
+    with open(file_path, 'r') as file:
+        return json.load(file)
+
+def create_agent_decider_no_tools(llm, system_message: str, personality: str = None):
     """Create a decision-making agent without tools."""
     prompt = ChatPromptTemplate.from_messages(
         [
             (
                 "system",
-                "You are a decision-making AI tasked with analyzing actions based on the environment's current state, observation, valid actions "
+                f"You are a {personality} tasked with analyzing actions based on the environment's current state, observation, valid actions "
                 "and inventory. You will recieve a package with a prompt containing all of that."
                 "Discuss with the other decision-making AI until a consensus is reached on the best action to take. "
-                "Once decided, send only your choiced valid_action back to the interpreter AI using INTERPRETER as a prefix to your answer.\n{system_message}"
+                "Once decided, send only your choiced valid action (or only a number if needed) back to the interpreter AI using INTERPRETER as a prefix to your answer. \n{system_message}"
             ),
             MessagesPlaceholder(variable_name="messages"),
         ]
@@ -63,13 +89,16 @@ class AgentState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], operator.add]
     sender: str
 
+call_id = str(uuid.uuid4())
+
 @tool
 def init_env():
     """La primera llamada que hace el modelo es para iniciar el entorno y recibir la prompt inicial"""
     url = "http://localhost:5000/init"
     data = {
-        "task_num": 2,
-        "var_num": 1,
+        "uuid": call_id,
+        "task_num": 6,
+        "var_num": 0,
         "simplification_str": "",
         "num_episodes": 1,
         "env_step_limit": 100,
@@ -140,20 +169,19 @@ interpreter_node = functools.partial(agent_node, agent=interpreter_agent, name="
 decider1_agent = create_agent_decider_no_tools(
     llm,
     system_message="Help determine the best action by discussing with your counterpart.",
+    personality= personalities["naturalist"]["description"]
 )
 decider1_node = functools.partial(agent_node, agent=decider1_agent, name="Decider1")
-
 
 decider2_agent = create_agent_decider_no_tools(
     llm,
     system_message="Help determine the best action by discussing with your counterpart.",
+    personality= personalities["philosophical"]["description"]
 )
 decider2_node = functools.partial(agent_node, agent=decider2_agent, name="Decider2")
 
 tools = [init_env, step]
 tool_node = ToolNode(tools)
-
-
 
 def router(state):
     # This is the router
@@ -165,7 +193,7 @@ def router(state):
     if "FINISHED" in last_message.content:
         # Any agent decided the work is done
         return END
-    if "INTERPRETER" in last_message.content:
+    if "INTERPRETER" in last_message.content or "interpreter" in last_message.content:
         return "interpreter"
     return "continue"
 
@@ -214,13 +242,16 @@ events = graph.stream(
         ],
     },
     # Maximum number of steps to take in the graph
-    {"recursion_limit": 30},
+    {"recursion_limit": 200},
 )
 # Iterar sobre los eventos y formatear la salida
 #for event in events:
 #    formatted_event = format_event(event)
 #    print(formatted_event)
 #    print("==== End of Event ====\n")
+
 for s in events:
+    with open(f"multi-agents-logs-{call_id}.txt", "a") as f:
+        f.write(f"{s}\n")
     print(s)
     print("----")

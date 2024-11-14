@@ -1,0 +1,77 @@
+Step,Action,Observation,Reward,Completed,Score
+1,look around,"This room is called the hallway. In it, you see: 
+	the agent
+	a substance called air
+	a picture
+You also see:
+	A door to the art studio (that is closed)
+	A door to the bedroom (that is closed)
+	A door to the greenhouse (that is closed)
+	A door to the kitchen (that is closed)
+	A door to the living room (that is closed)
+	A door to the workshop (that is closed)",0,False,0
+2,open door to the bedroom,The door is now open.,8,False,8
+3,go to the bedroom,You move to the bedroom.,9,False,17
+4,look around,"This room is called the bedroom. In it, you see: 
+	the agent
+	a substance called air
+	a bed. On the bed is: a mattress. On the mattress is: a white pillow..
+	a closet. The closet door is closed. 
+	a painting
+	a table. On the table is: nothing.
+You also see:
+	A door to the hallway (that is open)",0,False,17
+5,open closet,The closet is now open.,0,False,17
+6,look in closet,"Inside the closet is: 
+	nothing",0,False,17
+7,open door to the greenhouse,No known action matches that input.,0,False,17
+8,go to the hallway,You move to the hallway.,0,False,17
+9,open door to the greenhouse,The door is now open.,0,False,17
+10,go to the greenhouse,You move to the greenhouse.,0,False,17
+11,look around,"This room is called the greenhouse. In it, you see: 
+	the agent
+	a substance called air
+	a bee hive. The bee hive door is closed. 
+	a flower pot 2 (containing nothing)
+	a flower pot 5 (containing a pea plant in the reproducing stage with a tall height, soil)
+	a flower pot 6 (containing a cherry tree in the reproducing stage, soil)
+	a flower pot 8 (containing a apple tree in the reproducing stage, soil)
+	a flower pot 9 (containing nothing)
+	a jug (containing nothing)
+	a shovel
+	a sink, which is turned off. In the sink is: nothing.
+You also see:
+	A door to the hallway (that is open)
+	A door to the outside (that is closed)",0,False,17
+12,focus on the pea plant,You focus on the pea plant.,50,False,67
+13,move pea plant to the red box in the kitchen,No known action matches that input.,0,False,67
+14,pick up pea plant,You move the pea plant to the inventory.,8,False,75
+15,go to the hallway,You move to the hallway.,0,False,75
+16,open door to the kitchen,The door is now open.,0,False,75
+17,go to the kitchen,You move to the kitchen.,8,False,83
+18,look around,"This room is called the kitchen. In it, you see: 
+	the agent
+	a substance called air
+	a chair. On the chair is: nothing.
+	a counter. On the counter is: a bowl (containing a red apple, a banana, an orange, a potato), a drawer.
+	a cupboard. The cupboard door is closed. 
+	a freezer. The freezer door is closed. 
+	a fridge. The fridge door is closed. 
+	a glass jar (containing a substance called sodium chloride)
+	a lighter
+	a oven, which is turned off. The oven door is closed. 
+	a painting
+	a red box (containing nothing)
+	a sink, which is turned off. In the sink is: nothing.
+	a substance called soap
+	a stopwatch, which is deactivated. 
+	a stove, which is turned off. On the stove is: nothing.
+	a table. On the table is: a glass cup (containing nothing).
+	a thermometer, currently reading a temperature of 10 degrees celsius
+You also see:
+	A door to the bathroom (that is closed)
+	A door to the hallway (that is open)
+	A door to the outside (that is closed)",0,False,83
+19,put down pea plant in the red box,No known action matches that input.,0,False,83
+20,put down pea plant,You move the pea plant to the kitchen.,0,False,83
+21,move pea plant to the red box,You move the pea plant to the red box.,17,True,100
