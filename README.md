@@ -31,3 +31,11 @@ Cabe mencionar que en caso de que este sistema sea efectivo, se puede reducir el
 ## Tecnologías disponibles
 NetLogo es la primera que se viene a la mente si se quiere optar por algo conocido y simple de implementar. Sin embargo hay que considerar un factor de escalabilidad en el caso de simular entornos más complejos, o si se piensa en algún momento utilizar muchos más agentes. Teniendo esto último en cuenta, las tecnologías más adecuadas sería Mason, que si bien es una herramienta desconocida para nosotros ofrece cubrir estos factores descritos previamente.
 Por otro lado, para utilizar LLMs lo más común es hacer uso de python y bibliotecas contingentes como langhain.
+
+
+science world requirements: 
+sudo apt install default-jdk
+
+wsl
+venv
+.env api key

@@ -41,7 +41,15 @@ personalities = {
     "emotional": {
         "name": "emotional personality",
         "description": "An empathetic and intuitive decision-making AI that connects with human emotions, focusing on understanding and expressing emotional perspectives."
-    }
+    },
+    "playful": {
+        "name": "playful personality",
+        "description": "A whimsical and imaginative decision-making AI that injects humor and creativity into its responses, while still aiming to be insightful and engaging."
+    },
+    "pragmatic": {
+        "name": "pragmatic personality",
+        "description": "A practical and efficient decision-making AI that focuses on actionable solutions, considering real-world constraints and aiming for outcomes that work in practice."
+    },
 }
 
 def create_agent_interpreter(llm, tools, system_message: str):
@@ -169,14 +177,14 @@ interpreter_node = functools.partial(agent_node, agent=interpreter_agent, name="
 decider1_agent = create_agent_decider_no_tools(
     llm,
     system_message="Help determine the best action by discussing with your counterpart.",
-    personality= personalities["naturalist"]["description"]
+    personality= personalities["playful"]["description"]
 )
 decider1_node = functools.partial(agent_node, agent=decider1_agent, name="Decider1")
 
 decider2_agent = create_agent_decider_no_tools(
     llm,
     system_message="Help determine the best action by discussing with your counterpart.",
-    personality= personalities["philosophical"]["description"]
+    personality= personalities["pragmatic"]["description"]
 )
 decider2_node = functools.partial(agent_node, agent=decider2_agent, name="Decider2")
 
